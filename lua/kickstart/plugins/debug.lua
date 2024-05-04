@@ -39,7 +39,29 @@ return {
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
+        'codelldb',
       },
+    }
+
+    dap.adapters.codelldb = {
+      type = "server",
+      port = "${port}",
+      executable = {
+        command = '/home/jacob/Downloads/extension/adapter/codelldb',
+        args = { "--port", "${port}" }
+      }
+    }
+    dap.configurations.c = {
+      {
+        name = "Launch",
+        type = "codelldb",
+        request = "launch",
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+      }
     }
 
     -- Basic debugging keymaps, feel free to change to your liking!
